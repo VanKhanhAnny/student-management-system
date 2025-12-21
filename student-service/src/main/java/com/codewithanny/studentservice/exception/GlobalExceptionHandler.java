@@ -1,5 +1,6 @@
 package com.codewithanny.studentservice.exception;
 
+import com.codewithanny.studentservice.StudentServiceApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +33,16 @@ public class GlobalExceptionHandler {
         log.warn("Email address already exist {}", ex.getMessage());
         errors.put("message", "Email address already exists");
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(StudentNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleStudentNotFoundException(
+            StudentNotFoundException ex) {
+
+        log.warn("Student not found {}", ex.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Student not found");
+        return ResponseEntity.badRequest().body(errors);
+
     }
 }
