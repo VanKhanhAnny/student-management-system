@@ -1,5 +1,6 @@
 package com.codewithanny.studentservice.service;
 
+import com.codewithanny.studentservice.dto.StudentRequestDTO;
 import com.codewithanny.studentservice.dto.StudentResponseDTO;
 import com.codewithanny.studentservice.mapper.StudentMapper;
 import com.codewithanny.studentservice.model.Student;
@@ -20,5 +21,11 @@ public class StudentService {
         List<Student> students = studentRepository.findAll();
 
         return students.stream().map(StudentMapper::toDTO).toList();
+    }
+
+    public StudentResponseDTO createStudent(StudentRequestDTO studentRequestDTO) {
+        Student newStudent = studentRepository.save(
+                StudentMapper.toModel(studentRequestDTO));
+        return StudentMapper.toDTO(newStudent);
     }
 }

@@ -1,11 +1,11 @@
 package com.codewithanny.studentservice.controller;
 
+import com.codewithanny.studentservice.dto.StudentRequestDTO;
 import com.codewithanny.studentservice.dto.StudentResponseDTO;
 import com.codewithanny.studentservice.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +22,11 @@ public class StudentController {
     public ResponseEntity<List<StudentResponseDTO>> getStudents() {
         List<StudentResponseDTO> students = studentService.getStudent();
         return ResponseEntity.ok().body(students);
+    }
+
+    @PostMapping
+    public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO studentRequestDTO) {
+        StudentResponseDTO studentResponseDTO = studentService.createStudent(studentRequestDTO);
+        return ResponseEntity.ok().body(studentResponseDTO);
     }
 }
