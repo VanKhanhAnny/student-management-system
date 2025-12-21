@@ -14,6 +14,9 @@ public class Student {
     private UUID id;
 
     @NotNull
+    private String name;
+
+    @NotNull
     @Email
     @Column(unique = true)
     private String email;
@@ -33,6 +36,14 @@ public class Student {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
