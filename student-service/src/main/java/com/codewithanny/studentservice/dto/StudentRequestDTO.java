@@ -20,14 +20,14 @@ public class StudentRequestDTO {
     @NotBlank(message="Date of birth is required")
     private String dateOfBirth;
 
-    @NotNull(message="Registered date is required")
+    @NotBlank(groups = CreateStudentValidationGroup.class, message="Registered date is required")
     private String registeredDate;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotBlank(message = "Name is required")  String name) {
         this.name = name;
     }
 
@@ -35,7 +35,7 @@ public class StudentRequestDTO {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NotBlank(message = "Email is required")  String email) {
         this.email = email;
     }
 
@@ -43,7 +43,7 @@ public class StudentRequestDTO {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(@NotBlank(message = "Address is required")  String address) {
         this.address = address;
     }
 
@@ -51,7 +51,7 @@ public class StudentRequestDTO {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(@NotBlank(message = "Date of birth is requires") String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

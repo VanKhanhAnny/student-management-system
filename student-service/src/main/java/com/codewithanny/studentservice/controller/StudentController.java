@@ -1,5 +1,6 @@
 package com.codewithanny.studentservice.controller;
 
+import com.codewithanny.studentservice.dto.CreateStudentValidationGroup;
 import com.codewithanny.studentservice.dto.StudentRequestDTO;
 import com.codewithanny.studentservice.dto.StudentResponseDTO;
 import com.codewithanny.studentservice.service.StudentService;
@@ -28,7 +29,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO studentRequestDTO) {
+    public ResponseEntity<StudentResponseDTO> createStudent(@Validated({Default.class, CreateStudentValidationGroup.class}) @RequestBody StudentRequestDTO studentRequestDTO) {
         StudentResponseDTO studentResponseDTO = studentService.createStudent(studentRequestDTO);
         return ResponseEntity.ok().body(studentResponseDTO);
     }
