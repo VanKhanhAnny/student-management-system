@@ -2,6 +2,7 @@ package com.codewithanny.studentservice.service;
 
 import com.codewithanny.studentservice.dto.StudentRequestDTO;
 import com.codewithanny.studentservice.dto.StudentResponseDTO;
+import com.codewithanny.studentservice.exception.EmailAlreadyExistsException;
 import com.codewithanny.studentservice.mapper.StudentMapper;
 import com.codewithanny.studentservice.model.Student;
 import com.codewithanny.studentservice.repository.StudentRepository;
@@ -24,8 +25,13 @@ public class StudentService {
     }
 
     public StudentResponseDTO createStudent(StudentRequestDTO studentRequestDTO) {
+        if (studentRepository.existsByEmail(studentRequestDTO.getEmail())) {
+            throw new EmailAlreadyExistsException("A student with this email " + "already exists" + studentRequestDTO.getEmail());
+        }
+
         Student newStudent = studentRepository.save(
                 StudentMapper.toModel(studentRequestDTO));
+
         return StudentMapper.toDTO(newStudent);
     }
 }
