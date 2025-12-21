@@ -41,4 +41,10 @@ public class StudentController {
 
         return ResponseEntity.ok().body(studentResponseDTO);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable UUID id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
+    }
 }
