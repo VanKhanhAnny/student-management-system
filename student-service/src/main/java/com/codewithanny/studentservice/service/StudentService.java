@@ -41,7 +41,7 @@ public class StudentService {
         Student student = studentRepository.findById(id).orElseThrow(
                 () -> new StudentNotFoundException("Student not found with ID: " + id));
 
-        if (studentRepository.existsByEmail(studentRequestDTO.getEmail())) {
+        if (studentRepository.existsByEmailAndIdNot(studentRequestDTO.getEmail(), id)) {
             throw new EmailAlreadyExistsException("A student with this email " + "already exists" + studentRequestDTO.getEmail());
         }
 
