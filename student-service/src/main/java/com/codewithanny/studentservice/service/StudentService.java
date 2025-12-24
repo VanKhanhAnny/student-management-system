@@ -5,6 +5,7 @@ import com.codewithanny.studentservice.dto.StudentResponseDTO;
 import com.codewithanny.studentservice.exception.EmailAlreadyExistsException;
 import com.codewithanny.studentservice.exception.StudentNotFoundException;
 import com.codewithanny.studentservice.grpc.BillingServiceGrpcClient;
+import com.codewithanny.studentservice.kafka.KafkaProducer;
 import com.codewithanny.studentservice.mapper.StudentMapper;
 import com.codewithanny.studentservice.model.Student;
 import com.codewithanny.studentservice.repository.StudentRepository;
@@ -19,10 +20,12 @@ import java.util.UUID;
 public class StudentService {
     private final StudentRepository studentRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
-    public StudentService(StudentRepository studentRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+    public StudentService(StudentRepository studentRepository, BillingServiceGrpcClient billingServiceGrpcClient, KafkaProducer kafkaProducer) {
         this.studentRepository = studentRepository;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<StudentResponseDTO> getStudent() {
@@ -38,7 +41,10 @@ public class StudentService {
 
         Student newStudent = studentRepository.save(
                 StudentMapper.toModel(studentRequestDTO));
+
         billingServiceGrpcClient.createBillingAccount(newStudent.getId().toString(), newStudent.getName(), newStudent.getEmail());
+
+        kafkaProducer.sendEvent(newStudent);
 
         return StudentMapper.toDTO(newStudent);
     }
