@@ -4,6 +4,7 @@ import com.codewithanny.studentservice.dto.StudentRequestDTO;
 import com.codewithanny.studentservice.dto.StudentResponseDTO;
 import com.codewithanny.studentservice.exception.EmailAlreadyExistsException;
 import com.codewithanny.studentservice.exception.StudentNotFoundException;
+import com.codewithanny.studentservice.grpc.BillingServiceGrpcClient;
 import com.codewithanny.studentservice.mapper.StudentMapper;
 import com.codewithanny.studentservice.model.Student;
 import com.codewithanny.studentservice.repository.StudentRepository;
@@ -17,9 +18,11 @@ import java.util.UUID;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
         this.studentRepository = studentRepository;
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
     public List<StudentResponseDTO> getStudent() {
@@ -35,6 +38,7 @@ public class StudentService {
 
         Student newStudent = studentRepository.save(
                 StudentMapper.toModel(studentRequestDTO));
+        billingServiceGrpcClient.createBillingAccount(newStudent.getId().toString(), newStudent.getName(), newStudent.getEmail());
 
         return StudentMapper.toDTO(newStudent);
     }
