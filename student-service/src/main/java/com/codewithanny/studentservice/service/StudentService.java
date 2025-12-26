@@ -10,7 +10,6 @@ import com.codewithanny.studentservice.mapper.StudentMapper;
 import com.codewithanny.studentservice.model.Student;
 import com.codewithanny.studentservice.repository.StudentRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.LocalDate;
 import java.util.List;
