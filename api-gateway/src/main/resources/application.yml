@@ -1,0 +1,27 @@
+server:
+  port: 4004
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: student-service-route
+          uri: http://student-service:4000
+          predicates:
+            - Path=/api/students/**
+          filters:
+            - StripPrefix=1
+
+          ## REST CLIENT -> http://localhost:4004/api/students
+          ## API GATEWAY -> http://student-service:4000/students
+          ## STUDENT SERVICE (SPRING BOOT APP) -> /students -> Students Array
+
+        - id: api-docs-student-route
+          uri: http://student-service:4000
+          predicates:
+            - Path=/api-docs/students
+          filters:
+            - RewritePath=/api-docs/students,/v3/api-docs
+
+          ## REST-CLIENT -> http://localhost:4004/api-docs/students
+          ## API-GATEWAY -> http://student-service:4000/v3/api/docs
