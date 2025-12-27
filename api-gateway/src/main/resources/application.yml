@@ -24,6 +24,7 @@ spring:
             - Path=/api/students/**
           filters:
             - StripPrefix=1
+            - JwtValidation
 
         ## REST-CLIENT -> http://localhost:4004/api-docs/students
         ## API-GATEWAY -> http://student-service:4000/v3/api/docs
