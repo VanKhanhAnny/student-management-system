@@ -227,6 +227,18 @@
             "type": "aws:cdk:logicalId",
             "data": "MskCluster"
           }
+        ],
+        "/localstack/StudentManagementCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StudentManagementCluster6EE0CF73"
+          }
+        ],
+        "/localstack/StudentManagementCluster/DefaultServiceDiscoveryNamespace/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StudentManagementClusterDefaultServiceDiscoveryNamespaceEAA2F0F7"
+          }
         ]
       },
       "displayName": "localstack"

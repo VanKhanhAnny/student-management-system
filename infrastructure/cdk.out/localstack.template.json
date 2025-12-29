@@ -662,6 +662,18 @@
     "KafkaVersion": "2.8.0",
     "NumberOfBrokerNodes": 1
    }
+  },
+  "StudentManagementCluster6EE0CF73": {
+   "Type": "AWS::ECS::Cluster"
+  },
+  "StudentManagementClusterDefaultServiceDiscoveryNamespaceEAA2F0F7": {
+   "Type": "AWS::ServiceDiscovery::PrivateDnsNamespace",
+   "Properties": {
+    "Name": "student-management.local",
+    "Vpc": {
+     "Ref": "StudentManagement22A97B7F"
+    }
+   }
   }
  }
 }
