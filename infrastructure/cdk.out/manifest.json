@@ -209,6 +209,18 @@
             "type": "aws:cdk:logicalId",
             "data": "StudentServiceDB922FA1D0"
           }
+        ],
+        "/localstack/AuthServiceDBHealthCheck": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AuthServiceDBHealthCheck"
+          }
+        ],
+        "/localstack/StudentServiceDBHealthCheck": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StudentServiceDBHealthCheck"
+          }
         ]
       },
       "displayName": "localstack"
