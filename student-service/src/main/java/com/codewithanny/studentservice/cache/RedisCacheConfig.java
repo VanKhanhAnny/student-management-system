@@ -25,6 +25,8 @@ public class RedisCacheConfig {
 
         PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
                 .allowIfSubType("com.codewithanny.")
+                .allowIfSubType("java.util.")
+                .allowIfSubType("java.time.")
                 .build();
 
         GenericJacksonJsonRedisSerializer serializer = GenericJacksonJsonRedisSerializer.builder()

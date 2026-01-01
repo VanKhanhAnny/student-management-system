@@ -1,4 +1,4 @@
 ### GET request to get all students
-GET http://localhost:4004/api/students?sort=desc&size=2&page=4&searchValue=John
+GET http://localhost:4004/api/students?sort=asc&size=2&page=1
 Authorization: Bearer {{token}}
 ###
