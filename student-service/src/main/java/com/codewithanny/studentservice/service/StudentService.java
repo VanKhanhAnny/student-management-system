@@ -10,6 +10,9 @@ import com.codewithanny.studentservice.kafka.KafkaProducer;
 import com.codewithanny.studentservice.mapper.StudentMapper;
 import com.codewithanny.studentservice.model.Student;
 import com.codewithanny.studentservice.repository.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +25,7 @@ import java.util.UUID;
 
 @Service
 public class StudentService {
+    private static final Logger log = LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository studentRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
     private final KafkaProducer kafkaProducer;
@@ -32,7 +36,20 @@ public class StudentService {
         this.kafkaProducer = kafkaProducer;
     }
 
+    @Cacheable(
+            value = "students",
+            key = "#page + '-' + #size + '-' + #sort + '-' + #sortField",
+            condition = "#searchValue == ''"
+    )
     public PagedStudentResponseDTO getStudents(int page, int size, String sort, String sortField, String searchValue) {
+
+        log.info("[REDIS]: Cache miss - fetching from DB");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+        }
 
         // request -> page = 1
         // pageable -> page = 0
