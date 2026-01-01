@@ -1,5 +1,6 @@
 package com.codewithanny.studentservice.service;
 
+import com.codewithanny.studentservice.dto.PagedStudentResponseDTO;
 import com.codewithanny.studentservice.dto.StudentRequestDTO;
 import com.codewithanny.studentservice.dto.StudentResponseDTO;
 import com.codewithanny.studentservice.exception.EmailAlreadyExistsException;
@@ -9,6 +10,10 @@ import com.codewithanny.studentservice.kafka.KafkaProducer;
 import com.codewithanny.studentservice.mapper.StudentMapper;
 import com.codewithanny.studentservice.model.Student;
 import com.codewithanny.studentservice.repository.StudentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,10 +32,33 @@ public class StudentService {
         this.kafkaProducer = kafkaProducer;
     }
 
-    public List<StudentResponseDTO> getStudents() {
-        List<Student> students = studentRepository.findAll();
+    public PagedStudentResponseDTO getStudents(int page, int size, String sort, String sortField, String searchValue) {
 
-        return students.stream().map(StudentMapper::toDTO).toList();
+        Pageable pageable = PageRequest.of(page, size,
+                sort.equals("desc")
+                        ? Sort.by(sortField).descending()
+                        : Sort.by(sortField).ascending());
+
+        Page<Student> studentPage;
+
+        if (searchValue == null || searchValue.isEmpty()) {
+            studentPage = studentRepository.findAll(pageable);
+        } else {
+            studentPage = studentRepository.findByNameContainingIgnoreCase(searchValue, pageable);
+        }
+
+        List<StudentResponseDTO> studentResponseDTOs = studentPage.getContent()
+                .stream()
+                .map(StudentMapper::toDTO)
+                .toList();
+
+        return new PagedStudentResponseDTO(
+                studentResponseDTOs,
+                studentPage.getNumber(),
+                studentPage.getSize(),
+                studentPage.getTotalPages(),
+                (int)studentPage.getTotalElements()
+        );
     }
 
     public StudentResponseDTO createStudent(StudentRequestDTO studentRequestDTO) {

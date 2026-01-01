@@ -36,7 +36,7 @@ public class StudentController {
             @RequestParam(defaultValue = "name") String sortField,
             @RequestParam(defaultValue = "") String searchValue
     ) {
-        PagedStudentResponseDTO students = studentService.getStudents();
+        PagedStudentResponseDTO students = studentService.getStudents(page, size, sort, sortField, searchValue);
         return ResponseEntity.ok().body(students);
     }
 
