@@ -27,7 +27,7 @@ public class StudentService {
         this.kafkaProducer = kafkaProducer;
     }
 
-    public List<StudentResponseDTO> getStudent() {
+    public List<StudentResponseDTO> getStudents() {
         List<Student> students = studentRepository.findAll();
 
         return students.stream().map(StudentMapper::toDTO).toList();

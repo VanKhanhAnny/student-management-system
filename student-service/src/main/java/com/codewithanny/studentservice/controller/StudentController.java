@@ -1,6 +1,7 @@
 package com.codewithanny.studentservice.controller;
 
 import com.codewithanny.studentservice.dto.CreateStudentValidationGroup;
+import com.codewithanny.studentservice.dto.PagedStudentResponseDTO;
 import com.codewithanny.studentservice.dto.StudentRequestDTO;
 import com.codewithanny.studentservice.dto.StudentResponseDTO;
 import com.codewithanny.studentservice.service.StudentService;
@@ -28,14 +29,14 @@ public class StudentController {
     //http://localhost:4004/api/students?page=1&size=10
     @GetMapping
     @Operation(summary = "Get Students")
-    public ResponseEntity<List<StudentResponseDTO>> getStudents(
+    public ResponseEntity<PagedStudentResponseDTO> getStudents(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "asc") String sort,
             @RequestParam(defaultValue = "name") String sortField,
             @RequestParam(defaultValue = "") String searchValue
     ) {
-        List<StudentResponseDTO> students = studentService.getStudent();
+        PagedStudentResponseDTO students = studentService.getStudents();
         return ResponseEntity.ok().body(students);
     }
 
