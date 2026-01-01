@@ -25,9 +25,16 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    //http://localhost:4004/api/students?page=1&size=10
     @GetMapping
     @Operation(summary = "Get Students")
-    public ResponseEntity<List<StudentResponseDTO>> getStudents() {
+    public ResponseEntity<List<StudentResponseDTO>> getStudents(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "asc") String sort,
+            @RequestParam(defaultValue = "name") String sortField,
+            @RequestParam(defaultValue = "") String searchValue
+    ) {
         List<StudentResponseDTO> students = studentService.getStudent();
         return ResponseEntity.ok().body(students);
     }
