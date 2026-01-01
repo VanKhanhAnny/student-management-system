@@ -34,7 +34,9 @@ public class StudentService {
 
     public PagedStudentResponseDTO getStudents(int page, int size, String sort, String sortField, String searchValue) {
 
-        Pageable pageable = PageRequest.of(page, size,
+        // request -> page = 1
+        // pageable -> page = 0
+        Pageable pageable = PageRequest.of(page - 1, size,
                 sort.equals("desc")
                         ? Sort.by(sortField).descending()
                         : Sort.by(sortField).ascending());
@@ -54,7 +56,7 @@ public class StudentService {
 
         return new PagedStudentResponseDTO(
                 studentResponseDTOs,
-                studentPage.getNumber(),
+                studentPage.getNumber() + 1,
                 studentPage.getSize(),
                 studentPage.getTotalPages(),
                 (int)studentPage.getTotalElements()
