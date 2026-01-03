@@ -1,6 +1,6 @@
 package com.codewithanny.studentservice.kafka;
 
-import building.events.BillingAccountEvent;
+import billing.events.BillingAccountEvent;
 import com.codewithanny.studentservice.model.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
