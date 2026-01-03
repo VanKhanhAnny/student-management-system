@@ -1,5 +1,6 @@
 package com.codewithanny.studentservice.kafka;
 
+import building.events.BillingAccountEvent;
 import com.codewithanny.studentservice.model.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,21 @@ public class KafkaProducer {
             kafkaTemplate.send("student", event.toByteArray());
         } catch (Exception e) {
             log.error("Error sending StudentCreated event: {}", event);
+        }
+    }
+
+    public void sendBillingAccountEvent(String studentId, String name, String email) {
+        BillingAccountEvent event = BillingAccountEvent.newBuilder()
+                .setStudentId(studentId)
+                .setName(name)
+                .setEmail(email)
+                .setEventType("BILLING_ACCOUNT_CREATE_REQUESTED")
+                .build();
+
+        try {
+            kafkaTemplate.send("billing_account", event.toByteArray());
+        } catch (Exception e) {
+            log.error("Error sending BillingAccountCreated event: {}", event);
         }
     }
 }
