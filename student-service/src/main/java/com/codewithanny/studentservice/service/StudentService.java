@@ -44,6 +44,7 @@ public class StudentService {
     public PagedStudentResponseDTO getStudents(int page, int size, String sort, String sortField, String searchValue) {
 
         log.info("[REDIS]: Cache miss - fetching from DB");
+        // ... logic to capture metric...
 
         try {
             Thread.sleep(2000);
