@@ -12,6 +12,7 @@ import software.amazon.awscdk.services.logs.RetentionDays;
 import software.amazon.awscdk.services.msk.CfnCluster;
 import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.route53.CfnHealthCheck;
+import software.amazon.awscdk.services.servicediscovery.DnsRecordType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -195,6 +196,10 @@ public class LocalStack extends Stack {
                 .cluster(ecsCluster)
                 .taskDefinition(taskDefinition)
                 .assignPublicIp(false)
+                .cloudMapOptions(CloudMapOptions.builder()
+                        .name(imageName) //student-service.student-management.local
+                        .dnsRecordType(DnsRecordType.A)
+                        .build())
                 .serviceName(imageName)
                 .build();
     }
@@ -237,6 +242,11 @@ public class LocalStack extends Stack {
                         .taskDefinition(taskDefinition)
                         .desiredCount(1)
                         .healthCheckGracePeriod(Duration.seconds(60))
+                        .publicLoadBalancer(true)
+                        .cloudMapOptions(CloudMapOptions.builder()
+                                .name("api-gateway")
+                                .dnsRecordType(DnsRecordType.A)
+                                .build())
                         .build();
 
     }
