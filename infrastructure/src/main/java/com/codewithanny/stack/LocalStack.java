@@ -70,7 +70,7 @@ public class LocalStack extends Stack {
                         List.of(4000),
                         studentServiceDb,
                         Map.of(
-                                "BILLING_SERVICE_ADDRESS", "host.docker.internal",
+                                "BILLING_SERVICE_ADDRESS", "billing-service.student-management.local",
                                 "BILLING_SERVICE_GRPC_PORT", "9001"
                         ));
         studentService.getNode().addDependency(studentServiceDb);
@@ -214,7 +214,7 @@ public class LocalStack extends Stack {
                 .image(ContainerImage.fromRegistry("api-gateway"))
                 .environment(Map.of(
                         "SPRING_PROFILES_ACTIVE", "prod",
-                        "AUTH_SERVICE_URL", "http://host.docker.internal:4005"
+                        "AUTH_SERVICE_URL", "http://auth-service.student-management.local:4005"
                 ))
                 .portMappings(List.of(4004).stream()
                         .map(port -> PortMapping.builder()
