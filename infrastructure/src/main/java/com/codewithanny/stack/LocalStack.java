@@ -7,6 +7,8 @@ import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.ecs.*;
 import software.amazon.awscdk.services.ecs.Protocol;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
+import software.amazon.awscdk.services.elasticache.CfnCacheCluster;
+import software.amazon.awscdk.services.elasticache.CfnSubnetGroup;
 import software.amazon.awscdk.services.logs.LogGroup;
 import software.amazon.awscdk.services.logs.RetentionDays;
 import software.amazon.awscdk.services.msk.CfnCluster;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class LocalStack extends Stack {
     private final Vpc vpc;
     private final Cluster ecsCluster;
+    private final CfnCacheCluster elasticCacheCluster;
 
     public LocalStack(final App scope, final String id, final StackProps props) {
 
@@ -35,8 +38,8 @@ public class LocalStack extends Stack {
         CfnHealthCheck studentDbHealthCheck = createDbHealthCheck(studentServiceDb, "StudentServiceDBHealthCheck");
 
         CfnCluster mskCluster = createMskCluster();
-
         this.ecsCluster = createEcsCluster();
+        this.elasticCacheCluster = createRedisCluster();
 
         FargateService authService =
                 createFargateService("AuthService",
@@ -77,8 +80,12 @@ public class LocalStack extends Stack {
         studentService.getNode().addDependency(studentDbHealthCheck);
         studentService.getNode().addDependency(billingService);
         studentService.getNode().addDependency(mskCluster);
+        studentService.getNode().addDependency(elasticCacheCluster);
 
-        createApiGatewayService();
+        ApplicationLoadBalancedFargateService apiGateway =
+                createApiGatewayService();
+
+        apiGateway.getNode().addDependency(elasticCacheCluster);
     }
 
     private Vpc createVpc() {
@@ -171,6 +178,10 @@ public class LocalStack extends Stack {
         Map<String, String> envVars = new HashMap<>();
         envVars.put("STRING_KAFKA_BOOTSTRAP_SERVERS", "localhost.localstack.cloud:4510, localhost.localstack.cloud:4511, localhost.localstack.cloud:4512");
 
+        envVars.put("STRING_CACHE_TYPE", "redis");
+        envVars.put("STRING_DATA_REDIS_HOST", elasticCacheCluster.getAttrRedisEndpointAddress());
+        envVars.put("STRING_DATA_REDIS_PORT", elasticCacheCluster.getAttrRedisEndpointPort());
+
         if (additionalEnvVars != null) {
             envVars.putAll(additionalEnvVars);
         }
@@ -204,7 +215,7 @@ public class LocalStack extends Stack {
                 .build();
     }
 
-    private void createApiGatewayService() {
+    private ApplicationLoadBalancedFargateService createApiGatewayService() {
         FargateTaskDefinition taskDefinition = FargateTaskDefinition.Builder.create(this, "APIGatewayTaskDefinition")
                 .cpu(256)
                 .memoryLimitMiB(512)
@@ -214,7 +225,9 @@ public class LocalStack extends Stack {
                 .image(ContainerImage.fromRegistry("api-gateway"))
                 .environment(Map.of(
                         "SPRING_PROFILES_ACTIVE", "prod",
-                        "AUTH_SERVICE_URL", "http://auth-service.student-management.local:4005"
+                        "AUTH_SERVICE_URL", "http://auth-service.student-management.local:4005",
+                        "REDIS_HOST", elasticCacheCluster.getAttrRedisEndpointAddress(),
+                        "REDIS_PORT", elasticCacheCluster.getAttrRedisEndpointPort()
                 ))
                 .portMappings(List.of(4004).stream()
                         .map(port -> PortMapping.builder()
@@ -249,7 +262,28 @@ public class LocalStack extends Stack {
                                 .build())
                         .build();
 
+        return apiGateway;
+
     }
+
+    private CfnCacheCluster createRedisCluster() {
+        CfnSubnetGroup redisSubnetGroup = CfnSubnetGroup.Builder
+                .create(this, "RedisSubnetGroup")
+                .description("Redis/elasticache subnet group")
+                .subnetIds(vpc.getPrivateSubnets().stream()
+                        .map(ISubnet::getSubnetId)
+                        .collect(Collectors.toList()))
+                .build();
+
+        return CfnCacheCluster.Builder.create(this, "RedisCluster")
+                .cacheNodeType("cache.t2.micro")
+                .engine("redis")
+                .numCacheNodes(1)
+                .cacheSubnetGroupName(redisSubnetGroup.getCacheSubnetGroupName())
+                .vpcSecurityGroupIds(List.of(vpc.getVpcDefaultSecurityGroup()))
+                .build();
+    }
+
 
     public static void main(final String[] args) {
         App app = new App(AppProps.builder().outdir("./cdk.out").build());
