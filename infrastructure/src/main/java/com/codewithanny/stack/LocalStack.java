@@ -84,8 +84,15 @@ public class LocalStack extends Stack {
 
         ApplicationLoadBalancedFargateService apiGateway =
                 createApiGatewayService();
-
         apiGateway.getNode().addDependency(elasticCacheCluster);
+
+        FargateService prometheusService = createFargateService(
+                "PrometheusService",
+                "prometheus-prod",
+                List.of(9090),
+                null,
+                null
+        );
     }
 
     private Vpc createVpc() {
