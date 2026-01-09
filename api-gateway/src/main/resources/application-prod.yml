@@ -2,6 +2,10 @@ server:
   port: 4004
 
 spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
   cloud:
     gateway:
       routes:
@@ -9,7 +13,7 @@ spring:
         ## API GATEWAY -> http://auth-service:4005/login
         - id: auth-service-route
           # auth-ecs-service-2392743856.aws.com
-          uri: http://host.docker.internal:4005
+          uri: http://auth-service.student-management.local:4005
           predicates:
             - Path=/auth/**
           filters:
@@ -20,7 +24,7 @@ spring:
         ## API GATEWAY -> http://student-service:4000/students
         ## STUDENT SERVICE (SPRING BOOT APP) -> /students -> Students Array
         - id: student-service-route
-          uri: http://host.docker.internal:4000
+          uri: http://student-service.student-management.local:4000
           predicates:
             - Path=/api/students/**
           filters:
@@ -30,7 +34,7 @@ spring:
         ## REST-CLIENT -> http://localhost:4004/api-docs/students
         ## API-GATEWAY -> http://student-service:4000/v3/api/docs
         - id: api-docs-student-route
-          uri: http://host.docker.internal:4000
+          uri: http://student-service.student-management.local:4000
           predicates:
             - Path=/api-docs/students
           filters:
@@ -38,7 +42,7 @@ spring:
 
 
         - id: api-docs-auth-route
-          uri: http://host.docker.internal:4005
+          uri: http://auth-service.student-management.local:4005
           predicates:
             - Path=/api-docs/auth
           filters:
