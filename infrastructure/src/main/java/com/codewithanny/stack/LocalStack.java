@@ -142,6 +142,7 @@ public class LocalStack extends Stack {
                         .clientSubnets(vpc.getPrivateSubnets().stream()
                                 .map(ISubnet::getSubnetId)
                                 .collect(Collectors.toList()))
+                        .securityGroups(List.of(vpc.getVpcDefaultSecurityGroup()))
                         .brokerAzDistribution("DEFAULT")
                         .build())
                 .build();
@@ -185,11 +186,11 @@ public class LocalStack extends Stack {
                         .build()));
 
         Map<String, String> envVars = new HashMap<>();
-        envVars.put("STRING_KAFKA_BOOTSTRAP_SERVERS", "localhost.localstack.cloud:4510, localhost.localstack.cloud:4511, localhost.localstack.cloud:4512");
+        envVars.put("SPRING_KAFKA_BOOTSTRAP_SERVERS", "localhost.localstack.cloud:4510, localhost.localstack.cloud:4511, localhost.localstack.cloud:4512");
 
-        envVars.put("STRING_CACHE_TYPE", "redis");
-        envVars.put("STRING_DATA_REDIS_HOST", elasticCacheCluster.getAttrRedisEndpointAddress());
-        envVars.put("STRING_DATA_REDIS_PORT", elasticCacheCluster.getAttrRedisEndpointPort());
+        envVars.put("SPRING_CACHE_TYPE", "redis");
+        envVars.put("SPRING_DATA_REDIS_HOST", elasticCacheCluster.getAttrRedisEndpointAddress());
+        envVars.put("SPRING_DATA_REDIS_PORT", elasticCacheCluster.getAttrRedisEndpointPort());
 
         if (additionalEnvVars != null) {
             envVars.putAll(additionalEnvVars);

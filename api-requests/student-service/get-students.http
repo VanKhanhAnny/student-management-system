@@ -1,4 +1,4 @@
 ### GET request to get all students
-GET http://localhost:4004/api/students?sort=asc&size=2&page=1
+GET http://lb-5f2499c4.elb.localhost.localstack.cloud:4004/api/students
 Authorization: Bearer {{token}}
 ###
