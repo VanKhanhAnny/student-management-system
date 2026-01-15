@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public class AppointmentRequestDto {
 
-    @NotNull(message = "patientId is required")
-    private UUID patientId;
+    @NotNull(message = "studentId is required")
+    private UUID studentId;
 
     @NotNull(message = "startTime is required")
     @Future(message = "startTime must be in the future")
@@ -31,19 +31,19 @@ public class AppointmentRequestDto {
 
     public AppointmentRequestDto() {}
 
-    public AppointmentRequestDto(UUID patientId, LocalDateTime startTime, LocalDateTime endTime, String reason, Instant updatedAt) {
-        this.patientId = patientId;
+    public AppointmentRequestDto(UUID studentId, LocalDateTime startTime, LocalDateTime endTime, String reason, Instant updatedAt) {
+        this.studentId = studentId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.reason = reason;
     }
 
-    public UUID getPatientId() {
-        return patientId;
+    public UUID getstudentId() {
+        return studentId;
     }
 
-    public void setPatientId(UUID patientId) {
-        this.patientId = patientId;
+    public void setstudentId(UUID studentId) {
+        this.studentId = studentId;
     }
 
     public LocalDateTime getStartTime() {

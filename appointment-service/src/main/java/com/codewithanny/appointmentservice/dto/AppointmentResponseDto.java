@@ -6,8 +6,8 @@ import java.util.UUID;
 public class AppointmentResponseDto {
 
     private UUID id;
-    private UUID patientId;
-    private String patientName;
+    private UUID studentId;
+    private String studentName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String reason;
@@ -16,11 +16,11 @@ public class AppointmentResponseDto {
 
     public AppointmentResponseDto() {}
 
-    public AppointmentResponseDto(UUID id, UUID patientId, String patientName,
+    public AppointmentResponseDto(UUID id, UUID studentId, String studentName,
                                   LocalDateTime startTime, LocalDateTime endTime, String reason, Long version) {
         this.id = id;
-        this.patientId = patientId;
-        this.patientName = patientName;
+        this.studentId = studentId;
+        this.studentName = studentName;
         this.startTime = startTime;
         this.endTime = endTime;
         this.reason = reason;
@@ -35,20 +35,20 @@ public class AppointmentResponseDto {
         this.id = id;
     }
 
-    public UUID getPatientId() {
-        return patientId;
+    public UUID getstudentId() {
+        return studentId;
     }
 
-    public void setPatientId(UUID patientId) {
-        this.patientId = patientId;
+    public void setstudentId(UUID studentId) {
+        this.studentId = studentId;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public String getstudentName() {
+        return studentName;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setstudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     public LocalDateTime getStartTime() {
