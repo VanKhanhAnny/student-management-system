@@ -38,11 +38,11 @@ public class AppointmentRequestDto {
         this.reason = reason;
     }
 
-    public UUID getstudentId() {
+    public UUID getStudentId() {
         return studentId;
     }
 
-    public void setstudentId(UUID studentId) {
+    public void setStudentId(UUID studentId) {
         this.studentId = studentId;
     }
 

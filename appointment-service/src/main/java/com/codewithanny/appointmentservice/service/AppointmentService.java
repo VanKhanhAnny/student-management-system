@@ -23,7 +23,7 @@ public class AppointmentService {
                             = new AppointmentResponseDto();
 
                     appointmentResponseDto.setId(appointment.getId());
-                    appointmentResponseDto.setstudentId(appointment.getStudentId());
+                    appointmentResponseDto.setStudentId(appointment.getStudentId());
                     appointmentResponseDto.setStartTime(appointment.getStartTime());
                     appointmentResponseDto.setEndTime(appointment.getEndTime());
                     appointmentResponseDto.setReason(appointment.getReason());

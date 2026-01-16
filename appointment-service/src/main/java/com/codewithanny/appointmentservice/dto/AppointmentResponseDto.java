@@ -35,19 +35,19 @@ public class AppointmentResponseDto {
         this.id = id;
     }
 
-    public UUID getstudentId() {
+    public UUID getStudentId() {
         return studentId;
     }
 
-    public void setstudentId(UUID studentId) {
+    public void setStudentId(UUID studentId) {
         this.studentId = studentId;
     }
 
-    public String getstudentName() {
+    public String getStudentName() {
         return studentName;
     }
 
-    public void setstudentName(String studentName) {
+    public void setStudentName(String studentName) {
         this.studentName = studentName;
     }
 
