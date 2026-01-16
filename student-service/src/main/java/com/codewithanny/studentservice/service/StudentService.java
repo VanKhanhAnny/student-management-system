@@ -91,7 +91,7 @@ public class StudentService {
 
         billingServiceGrpcClient.createBillingAccount(newStudent.getId().toString(), newStudent.getName(), newStudent.getEmail());
 
-        kafkaProducer.sendEvent(newStudent);
+        kafkaProducer.sendStudentCreatedEvent(newStudent);
 
         return StudentMapper.toDTO(newStudent);
     }
