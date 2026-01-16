@@ -31,6 +31,20 @@ public class KafkaProducer {
         }
     }
 
+    public void sendStudentUpdatedEvent(Student student) {
+        StudentEvent event = StudentEvent.newBuilder()
+                .setStudentId(student.getId().toString())
+                .setName(student.getName())
+                .setEmail(student.getEmail())
+                .build();
+
+        try {
+            kafkaTemplate.send("student.updated", event.toByteArray());
+        } catch (Exception e) {
+            log.error("Error sending StudentUpdated event: {}", event);
+        }
+    }
+
     public void sendBillingAccountEvent(String studentId, String name, String email) {
         BillingAccountEvent event = BillingAccountEvent.newBuilder()
                 .setStudentId(studentId)

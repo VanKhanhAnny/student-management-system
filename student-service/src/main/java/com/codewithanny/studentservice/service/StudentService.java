@@ -109,6 +109,8 @@ public class StudentService {
         student.setDateOfBirth(LocalDate.parse(studentRequestDTO.getDateOfBirth()));
 
         Student updatedStudent = studentRepository.save(student);
+
+        kafkaProducer.sendStudentUpdatedEvent(updatedStudent);
         return StudentMapper.toDTO(updatedStudent);
     }
 
